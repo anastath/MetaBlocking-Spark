@@ -72,7 +72,7 @@ object Overlapping_Index{
   } 
 
   finally {
-   sc.stop()
+        sc.stop()
   }
 }
 }
