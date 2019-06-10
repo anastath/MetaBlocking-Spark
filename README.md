@@ -1,8 +1,15 @@
 # MetaBlocking-Spark
-This source code implements the following parts 
-from this work XXXX
+This source code implements the following parts from this work
 
-It is written in Scala XX using Apache Spark XX 
+Efthymiou, Vasilis, et al. "Parallel meta-blocking for scaling entity resolution over big heterogeneous data." Information Systems 65 (2017): 137-157.
+
+1. Block filtering
+2. Comparison-based preprocessing
+3. Cardinality Node Pruning (CNP) using the Aggregate Reciprocal Comparisons Scheme (ARCS) weighting scheme
+
+It also introduces a source code which calculates the difference between (i) the input overlapping index BEFORE the pipeline (Block Filtering | Comparison based preprocessing | CNP_ARCS), and (ii) the output overlapping index, where overlapping index is defined as the number of entities in all the blocks of the Block collection divided by the number of entities in the initial dataset.
+
+The code is written in Scala XX using Apache Spark XX.  
 
 ## Instructions for execution, execute locally (1 core)
 
