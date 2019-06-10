@@ -31,61 +31,48 @@ object Overlapping_Index{
   and output overlapping index */
   
   def main(args: Array[String]) {
-    
-//    val spark = SparkSession.builder.appName("Simple Application").getOrCreate()
-//    val data = spark.read.textFile(file3).cache()
- 
-    
-val conf = new SparkConf().setAppName("Simple Application")//.setMaster(master)
-val sc = new SparkContext(conf) 
-//val file = sc.getConf.get("spark.myapp.input") // read input data as a runtime parameter // TO-DO:: read from properties file --DONE
-//val output =  sc.getConf.get("spark.myapp.output") // read output file as a runtime parameter    // TO-DO:: read from properties file --DONE   
+     
+   val conf = new SparkConf().setAppName("Simple Application")//.setMaster(master)
+   val sc = new SparkContext(conf)
+   val prop = new Properties();    
+   val input = new FileInputStream("config.properties"); 
 
- val prop = new Properties();    
- val input = new FileInputStream("config.properties"); 
+   try {
+        prop.load(input) //load properties file
 
-try {
+        // Calculate overlapping index in the initial block collection BEFORE the pipeline (Block Filtering | Comparison based preprocessing | CNP_ARCS)  
+        val fileInput=prop.getProperty("spark.myapp.input.step1") // read pipeline input data file 
+        val data1 = sc.textFile(fileInput).cache() 
 
+        val numEntities = data1.map{line=>line.split(" ")(1)}.flatMap{line=>line.split(",")}.distinct.reduce{(a,b)=> if(a>b) a else b}.toInt // number of entities in input data equals the maximum entity index 
+        System.out.println("ENTITIES "+numEntities)
 
-prop.load(input) //load properties file
-
-// Calculate overlapping index in the initial block collection BEFORE the pipeline (Block Filtering | Comparison based preprocessing | CNP_ARCS)  
-val fileInput=prop.getProperty("spark.myapp.input.step1") // read pipeline input data file 
-val data1 = sc.textFile(fileInput).cache() 
-
-val numEntities = data1.map{line=>line.split(" ")(1)}.flatMap{line=>line.split(",")}.distinct.reduce{(a,b)=> if(a>b) a else b}.toInt // number of entities in input data equals the maximum entity index 
-System.out.println("ENTITIES "+numEntities)
-
-val numEntitiesInBlocks=data1.map{line=>line.split(" ")(1)}.map{line=>line.split(",")}.map{line=>line.size}.reduce{(a,b)=>a+b}
-val inputOverlappingIndex=(numEntitiesInBlocks.toFloat/numEntities.toFloat).toDouble //toFloat
+        val numEntitiesInBlocks=data1.map{line=>line.split(" ")(1)}.map{line=>line.split(",")}.map{line=>line.size}.reduce{(a,b)=>a+b}
+        val inputOverlappingIndex=(numEntitiesInBlocks.toFloat/numEntities.toFloat).toDouble //toFloat
 
 
-// Calculate overlapping index in the initial block collection AFTER the pipeline (Block Filtering | Comparison based preprocessing | CNP_ARCS) 
-val fileOutput=prop.getProperty("spark.myapp.output.step3") // read pipeline output data file 
-val data2=sc.textFile(fileOutput).cache()                                       
-val tmp1=data2.map{line=>line.replaceFirst(",","#")}.map{line=>line.slice(2,line.length-2)}.map{line=>line.replaceAll("\\),",",")}//.map(_.split("#")).map(line=>(line(0),line(1)))//.flatMapValues{line=>line}
+        // Calculate overlapping index in the initial block collection AFTER the pipeline (Block Filtering | Comparison based preprocessing | CNP_ARCS) 
+        val fileOutput=prop.getProperty("spark.myapp.output.step3") // read pipeline output data file 
+        val data2=sc.textFile(fileOutput).cache()                                       
+        val tmp1=data2.map{line=>line.replaceFirst(",","#")}.map{line=>line.slice(2,line.length-2)}.map{line=>line.replaceAll("\\),",",")}//.map(_.split("#")).map(line=>(line(0),line(1)))//.flatMapValues{line=>line}
 
-val numEntitiesInBlocksOutput=tmp1.map(_.split("#")).map{line=>(line(0),line(1))}.flatMapValues{_.split("\\),\\(")}.map{line=>line.toString.replaceAll(",\\(",",")}.map{line=>line.replaceAll("\\)\\)","\\)")}
-.map{line=>line.slice(1,line.length-1)}.map{line => val tokens=line.split(",") 
- (tokens(0),tokens(1),tokens(2))}.map{case(a,b,c)=>(a,b)}.map{line=>line.toString.split(",")}.map{line=>line.size}.reduce{(a,b)=>a+b}
- val outputOverlappingIndex=(numEntitiesInBlocksOutput.toFloat/numEntities.toFloat).toDouble
+        val numEntitiesInBlocksOutput=tmp1.map(_.split("#")).map{line=>(line(0),line(1))}.flatMapValues{_.split("\\),\\(")}.map{line=>line.toString.replaceAll(",\\(",",")}.map{line=>line.replaceAll("\\)\\)","\\)")}
+        .map{line=>line.slice(1,line.length-1)}.map{line => val tokens=line.split(",") 
+         (tokens(0),tokens(1),tokens(2))}.map{case(a,b,c)=>(a,b)}.map{line=>line.toString.split(",")}.map{line=>line.size}.reduce{(a,b)=>a+b}
+         val outputOverlappingIndex=(numEntitiesInBlocksOutput.toFloat/numEntities.toFloat).toDouble
 
+        // Calculate Difference between inputOverlappingIndex and outputOverlappingIndex as a Percentage
+        val dOverlappingIndex = (outputOverlappingIndex-inputOverlappingIndex)/inputOverlappingIndex *100;
+        val nums = Seq(numEntities, inputOverlappingIndex, numEntitiesInBlocksOutput, outputOverlappingIndex, dOverlappingIndex) 
+        val numsrdd =sc.parallelize(nums)
+   } 
 
- 
-// Calculate Difference between inputOverlappingIndex and outputOverlappingIndex as a Percentage
- 
-val dOverlappingIndex = (outputOverlappingIndex-inputOverlappingIndex)/inputOverlappingIndex *100;
- 
-val nums = Seq(numEntities, inputOverlappingIndex, numEntitiesInBlocksOutput, outputOverlappingIndex, dOverlappingIndex) 
-val numsrdd =sc.parallelize(nums)
-} 
+  catch {
+        case e: IOException => e.printStackTrace()
+  } 
 
-catch {
-      case e: IOException => e.printStackTrace()
-} 
-
-finally {
- sc.stop()
-}
+  finally {
+   sc.stop()
+  }
 }
 }
