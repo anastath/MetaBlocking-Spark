@@ -131,8 +131,8 @@ object CNP_ARCS{
       .map{line =>
       val tokens = line.split(' ')
       (tokens(0),tokens(1))
-      }.flatMapValues(_.split("#")).map{line=>line.toString}.map(line=>line.slice(1,line.length-1).replaceAll(",\\(",",").replaceAll("\\)\\)","\\)")) // TO-DO:: READ from properties files
-      data2.saveAsTextFile("E:/spark/2019/data2")
+      }.flatMapValues(_.split("#")).map{line=>line.toString}.map(line=>line.slice(1,line.length-1).replaceAll(",\\(",",").replaceAll("\\)\\)","\\)")) 
+      
       val tmp5 = data2.map{line =>
       val tokens = line.split(',')
       (tokens(1),tokens(2))
