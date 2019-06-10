@@ -9,7 +9,7 @@ Efthymiou, Vasilis, et al. "Parallel meta-blocking for scaling entity resolution
 
 It also introduces a source code which calculates the difference between (i) the input overlapping index BEFORE the pipeline (Block Filtering | Comparison based preprocessing | CNP_ARCS), and (ii) the output overlapping index, where overlapping index is defined as the number of entities in all the blocks of the Block collection divided by the number of entities in the initial dataset.
 
-The code is written in Scala XX using Apache Spark XX.  
+The code is written in Scala 2.11 using Apache Spark 2.3 (https://spark.apache.org/releases/spark-release-2-3-0.html).  
 
 ## Instructions for execution, execute locally (1 core)
 
