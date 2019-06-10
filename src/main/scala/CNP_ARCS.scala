@@ -112,18 +112,11 @@ object CNP_ARCS{
       val LeCoBI = tmp2.map{case((a,b),c,d)=>(c,d)}.map(x=>(x._1.split(',').toList.map((s: String) => s.toInt).sorted, x._2.split(',').toList.map((s: String) => s.toInt).sorted))
       val entitiesCombins=tmp2.map{case((a,b),c,d)=>(a,b)} 
       val LeCoBIList = LeCoBI.map(line =>(LeCoBIfunc(line._1,line._2))).map(_.take(1)) // the first block_id is the minimum (common) block_id, since the lists were sorted by block_id, in ascending order
-
       val entitiesCombsLeCoBI = entitiesCombins.zip(LeCoBIList)
-
       val entitiesCombsLeCoBI2 = entitiesCombsLeCoBI.filter(x => x._2.nonEmpty)
-
       val entitiesCombsLeCoBI3 = entitiesCombsLeCoBI2.map(line => ("(" +line._1._1 + "," + line._1._2 +")", line._2.mkString))//.map{case(a,b)=>((a),b)}
-
-
       val blockCombsforjoin=blockCombs.map{case(a,b)=>(b,a)} //.keyBy(t => t._1)
-
       val tmp4 = blockCombsforjoin.join(entitiesCombsLeCoBI3).map{case(a,(b,c))=>(a,b,c)}.filter(x=>(x._2==x._3)).map{case(a,b,c)=>(a,b)} // WHERE DO WE NEED THIS ???? Isn't entitiesCombsLeCoBI3 enough ???
-
 
       //########################### Step3:: Find blockIDs and their block cardinalities
       val file4=prop.getProperty("spark.myapp.output.step1") // (entity_id, block_id, block_cardinality) :: filtered by block_cardinality threshold as per Block Filtering technique
