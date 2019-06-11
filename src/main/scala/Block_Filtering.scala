@@ -42,17 +42,15 @@ def blockCardins(blockCards: Array[Int]):  Array[Int] = {
   def main(args: Array[String]) {          
     
     val conf = new SparkConf().setAppName("Simple Application")//.setMaster(master)
-    val sc = new SparkContext(conf)
-    
-    //sc.getConf.set("spark.myapp.input","")
-    
+    val sc = new SparkContext(conf)  
+	  
     val prop = new Properties();    
     val input = new FileInputStream("config.properties");
 	  
     try {    
     // load a properties file
-		prop.load(input)//.toString()
-		val logFile=prop.getProperty("spark.myapp.input.step1") // read input data file path parameter
+    prop.load(input)//.toString()
+    val logFile=prop.getProperty("spark.myapp.input.step1") // read input data file path parameter
     val logData = sc.textFile(logFile).cache()    
     val output=prop.getProperty("spark.myapp.output.step1") // read output data file path parameter    
     val filtering = prop.getProperty("spark.myapp.filtering").toBoolean // read filtering option parameter
