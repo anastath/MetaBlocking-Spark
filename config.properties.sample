@@ -1,8 +1,8 @@
 spark.myapp.input.step1 E:/spark/myInput/input.txt
-spark.myapp.output.step1 E:/spark/myOutput3/output-step1.txt
+spark.myapp.output.step1 E:/spark/myOutput/output-step1.txt
 spark.myapp.filtering true
-spark.myapp.input.step2 E:/spark/myOutput3/output-step1.txt
-spark.myapp.output.step2 E:/spark/myOutput3/output-step2.txt
-spark.myapp.input.step3 E:/spark/myOutput3/output-step2.txt
-spark.myapp.output.step3 E:/spark/myOutput3/output-step3.txt
+spark.myapp.input.step2 E:/spark/myOutput/output-step1.txt
+spark.myapp.output.step2 E:/spark/myOutput/output-step2.txt
+spark.myapp.input.step3 E:/spark/myOutput/output-step2.txt
+spark.myapp.output.step3 E:/spark/myOutput/output-step3.txt
 spark.myapp.cardinality.threshold 2
