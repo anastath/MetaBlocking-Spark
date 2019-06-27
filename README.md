@@ -34,4 +34,5 @@ To launch the jar locally (on localhost, with 1 core), using spark-submit, chang
 > spark-submit --class "main.scala.Overlapping_Index" --master local target\SimpleApp-0.0.1-SNAPSHOT.jar
 *********************************************************************************************************************
 To use the sample config.properties file, rename the config.properties.sample file to config.properties
+
 A sample input file exists in <PROJECT-HOME>/input/input.txt
