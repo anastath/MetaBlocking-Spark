@@ -19,7 +19,7 @@ Run the four classes in *THIS* order:
 3) CNP_ARCS
 4) Overlapping_Index
 
-To launch the jars using spark-submit, run the following commands in cmd.
+To launch the jar locally (on localhost, with 1 core), using spark-submit, run the following commands in cmd.
 
 1.Step1:: Block Filtering
 spark-submit --class "main.scala.Block_Filtering" --master local <MetaBlocking-Spark-home>\target\SimpleApp-0.0.1-SNAPSHOT.jar                                                                                                                         
