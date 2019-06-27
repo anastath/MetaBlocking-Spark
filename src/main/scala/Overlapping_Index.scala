@@ -65,9 +65,13 @@ object Overlapping_Index{
         val dOverlappingIndex = (outputOverlappingIndex-inputOverlappingIndex)/inputOverlappingIndex *100;
         val nums = Seq(numEntities, inputOverlappingIndex, numEntitiesInBlocksOutput, outputOverlappingIndex, dOverlappingIndex) 
         val numsrdd =sc.parallelize(nums)
-   } 
+        val output=prop.getProperty("spark.myapp.output.step4") // read output data file path parameter
+        val writer1 = new PrintWriter(output)  
+        numsrdd.collect.foreach(line=>writer1.println(line))
+        writer1.close()
+       } 
 
-  catch {
+   catch {
         case e: IOException => e.printStackTrace()
   } 
 
