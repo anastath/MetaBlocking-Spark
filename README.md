@@ -35,4 +35,4 @@ To launch the jar locally (on localhost, with 1 core), using spark-submit, chang
 *********************************************************************************************************************
 To use the sample config.properties file, rename the config.properties.sample file to config.properties
 
-A sample input file exists in <PROJECT-HOME>/input/input.txt
+A sample input file exists in input/input.txt
