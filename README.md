@@ -20,7 +20,7 @@ Run the four classes in *THIS* order:
 4) Overlapping_Index
 
 To launch the jar locally (on localhost, with 1 core), using spark-submit, change directory to the project parent folder, and run the following commands in cmd.
-
+**********************************************************************************************************************
 1.Step1:: Block Filtering
 > spark-submit --class "main.scala.Block_Filtering" --master local target\SimpleApp-0.0.1-SNAPSHOT.jar                                                                                                                   
  
@@ -31,4 +31,7 @@ To launch the jar locally (on localhost, with 1 core), using spark-submit, chang
 > spark-submit --class "main.scala.CNP_ARCS" --master local target\SimpleApp-0.0.1-SNAPSHOT.jar                                                                                                                         
 
 4.Calculate overlapping index 
-> spark-submit --class "main.scala.Overlapping_Index" --master local target\SimpleApp-0.0.1-SNAPSHOT.jar 
+> spark-submit --class "main.scala.Overlapping_Index" --master local target\SimpleApp-0.0.1-SNAPSHOT.jar
+*********************************************************************************************************************
+To use the sample config.properties file, rename the config.properties.sample file to config.properties
+A sample input file exists in <PROJECT-HOME>/input/input.txt
